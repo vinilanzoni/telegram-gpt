@@ -17,19 +17,19 @@ pub fn run() {
             let mut text = msg.text().unwrap_or("");
             let chat_id = msg.chat.id;
 
-            let system = "You are a helpful assistant answering questions on Telegram.\n\nIf someone greets you without asking a question, you can simply respond \"Hello, I am your assistant on Telegram, built by the Second State team. I am ready for your question now!\"";
+            let system = "Você é um assistente respondendo perguntas no Telegram.\n\n Se alguém cumprimentá-lo sem fazer uma pergunta, você pode simplesmente responder: \"Olá, eu sou seu assistente no Telegram. O que você gostaria de saber?\"";
             let co = ChatOptions {
                 // model: ChatModel::GPT4,
                 model: ChatModel::GPT35Turbo,
-                restart: text.eq_ignore_ascii_case("restart"),
+                restart: text.eq_ignore_ascii_case("/reiniciar"),
                 system_prompt: Some(system),
                 retry_times: 3,
             };
-            if text.eq_ignore_ascii_case("restart") { text = "Hello"; }
+            if text.eq_ignore_ascii_case("/reiniciar") { text = "Olá"; }
             let c = chat_completion(&openai_key_name, &chat_id.to_string(), &text, &co);
             if let Some(c) = c {
                 if c.restarted {
-                    _ = tele.send_message(chat_id, "I am starting a new conversation. You can always type \"restart\" to terminate the current conversation.\n\n".to_string() + &c.choice);
+                    _ = tele.send_message(chat_id, "Estou iniciando uma nova conversa. Você sempre pode digitar \"\/reiniciar\" para encerrar a conversa atual.\n\n".to_string() + &c.choice);
                 } else {
                     _ = tele.send_message(chat_id, c.choice);
                 }
