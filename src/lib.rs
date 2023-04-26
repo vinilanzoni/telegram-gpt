@@ -29,7 +29,7 @@ pub fn run() {
             let c = chat_completion(&openai_key_name, &chat_id.to_string(), &text, &co);
             if let Some(c) = c {
                 if c.restarted {
-                    _ = tele.send_message(chat_id, "Estou iniciando uma nova conversa. Você sempre pode digitar \"\/reiniciar\" para encerrar a conversa atual.\n\n".to_string() + &c.choice);
+                    _ = tele.send_message(chat_id, "Estou iniciando uma nova conversa. Você sempre pode digitar \"/reiniciar\" para encerrar a conversa atual.\n\n".to_string() + &c.choice);
                 } else {
                     _ = tele.send_message(chat_id, c.choice);
                 }
